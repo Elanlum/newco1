@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(ApiConstant.API_V_1 + "/trips")
-public class TripsController {
+public class TripsController <T extends TripDto>  implements AbstractTripsController {
 
     private final TripService tripService;
 
@@ -29,14 +29,14 @@ public class TripsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<TripDto> findAll() {
+    public List<T> findAll() {
         return tripService.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TripDto findById(@PathVariable("id") final Long id) {
-        return tripService.findById(id);
+    public T findById(@PathVariable("id") final Long id) {
+        return (T) tripService.findById(id);
     }
 
     @PostMapping
@@ -58,3 +58,5 @@ public class TripsController {
     }
 
 }
+
+

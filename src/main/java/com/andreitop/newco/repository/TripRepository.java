@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class TripRepository  {
+public class TripRepository <T extends TripDto> implements AbstractTripRepository   {
 
-    private final List<TripDto> trips = new ArrayList<>();
+    private final List<T> trips = new ArrayList<>();
 
-    public List<TripDto> findAll() {
+    public List<T> findAll() {
         return trips;
     }
 
@@ -23,7 +23,7 @@ public class TripRepository  {
 
     public void save(final TripDto trip) {
         trip.setId((long) (trips.size() + 1));
-        trips.add(trip);
+        trips.add((T) trip);
     }
 
     public void delete(final Long id) {
@@ -37,6 +37,6 @@ public class TripRepository  {
         trips.stream()
                 .filter(t -> t.getId().equals(newTrip.getId()))
                 .findFirst()
-                .ifPresent(t -> trips.set(trips.indexOf(t), newTrip));
+                .ifPresent(t -> trips.set(trips.indexOf(t), (T) newTrip));
     }
 }

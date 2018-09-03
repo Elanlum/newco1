@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TripService {
+public class TripService <T extends TripDto>  implements AbstractTripSerice {
 
     private final TripRepository tripRepository;
 
@@ -16,12 +16,12 @@ public class TripService {
         this.tripRepository = tripRepository;
     }
 
-    public List<TripDto> findAll() {
+    public List<T> findAll() {
         return tripRepository.findAll();
     }
 
-    public TripDto findById(Long id) {
-        return tripRepository.findById(id);
+    public T findById(Long id) {
+        return (T) tripRepository.findById(id);
     }
 
     public void save(TripDto trip) {
