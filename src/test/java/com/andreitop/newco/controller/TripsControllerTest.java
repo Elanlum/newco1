@@ -10,16 +10,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
 import java.util.Collections;
 import java.util.List;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(TripsController.class)
@@ -28,6 +29,7 @@ public class TripsControllerTest {
     private static final String TRIP_JSON = "{\"origin\": \"LED\" , \"destination\":\"MOW\", \"price\" : 12256}";
     private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
     private static final String API_URL = ApiConstant.API_V_1 + "/trips";
+    private static final String API_URL_ID = ApiConstant.API_V_1 + "/trips/{id}";
 
     @Autowired
     private MockMvc mockMvc;
@@ -63,5 +65,25 @@ public class TripsControllerTest {
                 .andExpect(jsonPath("$[0].origin", is("MOW")))
                 .andExpect(jsonPath("$[0].destination", is("LED")))
                 .andExpect(jsonPath("$[0].price", is(4232)));
+    }
+
+    @Test
+    public void findByIdTest()throws Exception{
+        TripDto tripDto = new TripDto();
+        tripDto.setId(1L);
+        tripDto.setOrigin("MOW");
+        tripDto.setDestination("LED");
+        tripDto.setPrice(4232);
+        when(tripService.findById(1L)).thenReturn(tripDto);
+
+        mockMvc.perform(get(API_URL_ID, 1L))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(CONTENT_TYPE))
+//                .andExpect(jsonPath("$", hasSize(0)))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.origin", is("MOW")))
+                .andExpect(jsonPath("$.destination", is("LED")))
+                .andExpect(jsonPath("$.price", is(4232)));
+
     }
 }
