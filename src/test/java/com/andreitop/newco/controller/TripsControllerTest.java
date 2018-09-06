@@ -18,8 +18,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -79,11 +78,26 @@ public class TripsControllerTest {
         mockMvc.perform(get(API_URL_ID, 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(CONTENT_TYPE))
-//                .andExpect(jsonPath("$", hasSize(0)))
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.origin", is("MOW")))
                 .andExpect(jsonPath("$.destination", is("LED")))
                 .andExpect(jsonPath("$.price", is(4232)));
 
+    }
+
+    @Test
+    public void deleteTest() throws Exception {
+        mockMvc.perform(put(API_URL)
+                .contentType(CONTENT_TYPE)
+                .content(TRIP_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateTest() throws Exception {
+        mockMvc.perform(put(API_URL)
+                .contentType(CONTENT_TYPE)
+                .content(TRIP_JSON))
+                .andExpect(status().isOk());
     }
 }
