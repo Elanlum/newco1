@@ -33,6 +33,7 @@ public class TripsControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+
     @MockBean
     private TripService tripService;
 
