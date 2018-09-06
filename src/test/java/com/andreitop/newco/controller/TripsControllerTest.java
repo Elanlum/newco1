@@ -87,10 +87,16 @@ public class TripsControllerTest {
 
     @Test
     public void deleteTest() throws Exception {
-        mockMvc.perform(put(API_URL)
+        TripDto tripDto = new TripDto();
+        tripDto.setId(1L);
+        tripDto.setOrigin("MOW");
+        tripDto.setDestination("LED");
+        tripDto.setPrice(4232);
+
+        mockMvc.perform(delete(API_URL_ID, 1L)
                 .contentType(CONTENT_TYPE)
                 .content(TRIP_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
