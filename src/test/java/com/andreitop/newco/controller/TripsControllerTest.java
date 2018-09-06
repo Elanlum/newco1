@@ -38,10 +38,7 @@ public class TripsControllerTest {
 
     @Test
     public void whenPostTrip_thenCreateTrip() throws Exception {
-        mockMvc.perform(post(API_URL)
-                .contentType(CONTENT_TYPE)
-                .content(TRIP_JSON))
-                .andExpect(status().isCreated());
+        mockMvc.perform(post(API_URL).contentType(CONTENT_TYPE).content(TRIP_JSON)).andExpect(status().isCreated());
     }
 
     @Test
@@ -56,18 +53,14 @@ public class TripsControllerTest {
         List<TripDto> allTrips = Collections.singletonList(tripDto);
         given(tripService.findAll()).willReturn(allTrips);
 
-        mockMvc.perform(get(API_URL))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(CONTENT_TYPE))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].origin", is("MOW")))
-                .andExpect(jsonPath("$[0].destination", is("LED")))
-                .andExpect(jsonPath("$[0].price", is(4232)));
+        mockMvc.perform(get(API_URL)).andExpect(status().isOk()).andExpect(content().contentType(CONTENT_TYPE))
+                .andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].id", is(1))).andExpect(jsonPath("$[0]" +
+                ".origin", is("MOW"))).andExpect(jsonPath("$[0].destination", is("LED"))).andExpect(jsonPath("$[0]" +
+                ".price", is(4232)));
     }
 
     @Test
-    public void findByIdTest()throws Exception{
+    public void findByIdTest() throws Exception {
         TripDto tripDto = new TripDto();
         tripDto.setId(1L);
         tripDto.setOrigin("MOW");
@@ -75,13 +68,9 @@ public class TripsControllerTest {
         tripDto.setPrice(4232);
         when(tripService.findById(1L)).thenReturn(tripDto);
 
-        mockMvc.perform(get(API_URL_ID, 1L))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(CONTENT_TYPE))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.origin", is("MOW")))
-                .andExpect(jsonPath("$.destination", is("LED")))
-                .andExpect(jsonPath("$.price", is(4232)));
+        mockMvc.perform(get(API_URL_ID, 1L)).andExpect(status().isOk()).andExpect(content().contentType(CONTENT_TYPE)
+        ).andExpect(jsonPath("$.id", is(1))).andExpect(jsonPath("$.origin", is("MOW"))).andExpect(jsonPath("$" +
+                ".destination", is("LED"))).andExpect(jsonPath("$.price", is(4232)));
 
     }
 
@@ -93,17 +82,12 @@ public class TripsControllerTest {
         tripDto.setDestination("LED");
         tripDto.setPrice(4232);
 
-        mockMvc.perform(delete(API_URL_ID, 1L)
-                .contentType(CONTENT_TYPE)
-                .content(TRIP_JSON))
-                .andExpect(status().isNoContent());
+        mockMvc.perform(delete(API_URL_ID, 1L).contentType(CONTENT_TYPE).content(TRIP_JSON)).andExpect(status()
+                .isNoContent());
     }
 
     @Test
     public void updateTest() throws Exception {
-        mockMvc.perform(put(API_URL)
-                .contentType(CONTENT_TYPE)
-                .content(TRIP_JSON))
-                .andExpect(status().isOk());
+        mockMvc.perform(put(API_URL).contentType(CONTENT_TYPE).content(TRIP_JSON)).andExpect(status().isOk());
     }
 }
