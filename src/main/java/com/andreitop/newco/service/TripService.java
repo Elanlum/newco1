@@ -1,6 +1,7 @@
 package com.andreitop.newco.service;
 
 import com.andreitop.newco.dto.TripDto;
+import com.andreitop.newco.error.TripNotFoundException;
 import com.andreitop.newco.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class TripService <T extends TripDto>  implements AbstractTripSerice {
         return tripRepository.findAll();
     }
 
-    public T findById(Long id) {
+    public T findById(Long id) throws TripNotFoundException {
         return (T) tripRepository.findById(id);
     }
 
@@ -28,11 +29,11 @@ public class TripService <T extends TripDto>  implements AbstractTripSerice {
         tripRepository.save(trip);
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws TripNotFoundException {
         tripRepository.delete(id);
     }
 
-    public void update(TripDto newTrip) {
+    public void update(TripDto newTrip) throws TripNotFoundException {
         tripRepository.update(newTrip);
     }
 }

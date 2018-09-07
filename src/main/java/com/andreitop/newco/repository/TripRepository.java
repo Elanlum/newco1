@@ -1,12 +1,14 @@
 package com.andreitop.newco.repository;
 
 import com.andreitop.newco.dto.TripDto;
+import com.andreitop.newco.error.TripNotFoundException;
 import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class TripRepository <T extends TripDto> implements AbstractTripRepository   {
+public class TripRepository<T extends TripDto> implements AbstractTripRepository {
 
     private final List<T> trips = new ArrayList<>();
 
@@ -14,11 +16,11 @@ public class TripRepository <T extends TripDto> implements AbstractTripRepositor
         return trips;
     }
 
-    public TripDto findById(final Long id) {
-        return trips.stream()
-                .filter(t -> t.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+    public TripDto findById(final Long id) throws TripNotFoundException {
+        T trip = trips.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
+        if (trip != null){
+        return trip;
+        } else throw new TripNotFoundException("Trip with current ID is not found");
     }
 
     public void save(final TripDto trip) {
@@ -26,17 +28,12 @@ public class TripRepository <T extends TripDto> implements AbstractTripRepositor
         trips.add((T) trip);
     }
 
-    public void delete(final Long id) {
-        trips.stream()
-                .filter(t -> t.getId().equals(id))
-                .findFirst()
-                .ifPresent(trips::remove);
+    public void delete(final Long id) throws TripNotFoundException{
+        trips.stream().filter(t -> t.getId().equals(id)).findFirst().ifPresent(trips::remove);
     }
 
-    public void update(final TripDto newTrip) {
-        trips.stream()
-                .filter(t -> t.getId().equals(newTrip.getId()))
-                .findFirst()
-                .ifPresent(t -> trips.set(trips.indexOf(t), (T) newTrip));
+    public void update(final TripDto newTrip) throws TripNotFoundException{
+        trips.stream().filter(t -> t.getId().equals(newTrip.getId())).findFirst().ifPresent(t -> trips.set(trips
+                .indexOf(t), (T) newTrip));
     }
 }
